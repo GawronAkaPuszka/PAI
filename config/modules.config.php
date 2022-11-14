@@ -12,7 +12,7 @@ return [
     'Laminas\Mvc\Plugin\Prg',
     'Laminas\Session',
     'Laminas\Form',
-    'Laminas\I18n',
+    //'Laminas\I18n', For some reason commenting this line solves an error 500 on my MAC
     'Laminas\InputFilter',
     'Laminas\Filter',
     'Laminas\Hydrator',
