@@ -7,6 +7,8 @@ namespace Application\Controller;
 use Laminas\Mvc\Controller\AbstractActionController;
 use Laminas\View\Model\ViewModel;
 use Application\Model\Data;
+use Application\Model\Liczby;
+use Application\Model\Miesiace;
 
 class IndexController extends AbstractActionController
 {
@@ -22,6 +24,24 @@ class IndexController extends AbstractActionController
         return new ViewModel([
             'dzisiaj' => $data->dzisiaj(),
             'dni_tygodnia' => $data->dniTygodnia(),
+        ]);
+    }
+
+    public function miesiaceAction() 
+    {
+        $months = new Miesiace();
+
+        return new ViewModel([
+            'miesiace' => $months->pobierzWszystkie(),
+        ]);
+    }
+
+    public function liczbyAction() 
+    {
+        $numbers = new Liczby();
+
+        return new ViewModel([
+            'liczby' => $numbers->generuj(),
         ]);
     }
 }
