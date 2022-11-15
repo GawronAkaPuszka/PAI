@@ -2,18 +2,23 @@
 
 namespace Application\Model;
 
-class Data 
+class Data
 {
-    public function dzisiaj()
-	{
-		return date('Y-m-d H:i:s');
-	}
-	
-	public function dniTygodnia(): array
+    public function dzisiaj(): string
     {
-		return [
-			'Poniedziałek', 'Wtorek', 'Środa', 
-			'Czwartek', 'Piątek', 'Sobota', 'Niedziela'
-		];
-	}
+        return date('Y-m-d H:i:s');
+    }
+
+    public function dniTygodnia(): array
+    {
+        return [
+            'Poniedziałek',
+            'Wtorek',
+            'Środa',
+            'Czwartek',
+            'Piątek',
+            'Sobota',
+            'Niedziela',
+        ];
+    }
 }
