@@ -76,4 +76,26 @@ class KsiazkiController extends AbstractActionController
 
         return $this->redirect()->toRoute('ksiazki');
     }
+
+    public function czyusunAction()
+    {
+        $id = (int)$this->params()->fromRoute('id');
+        if (empty($id)) {
+            $this->redirect()->toRoute('ksiazki');
+        }
+        return [
+            'ksiazka' => $this->ksiazka->pobierz($id),
+        ];
+    }
+
+    public function szczegolyAction() 
+    {
+        $id = (int)$this->params()->fromRoute('id');
+        if (empty($id)) {
+            $this->redirect()->toRoute('ksiazki');
+        }
+        return [
+            'ksiazka' => $this->ksiazka->pobierz($id),
+        ];
+    }
 }

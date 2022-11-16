@@ -4,8 +4,11 @@ declare(strict_types=1);
 
 namespace Application;
 
+use Application\Controller\AutorzyController;
 use Application\Controller\KsiazkiController;
 use Application\Controller\KsiazkiControllerFactory;
+use Application\Controller\AutorzyControllerFactory;
+use Application\Form\AutorForm;
 use Application\Form\KsiazkaForm;
 use Application\Model\Autor;
 use Application\Model\Data;
@@ -49,12 +52,23 @@ return [
                     ],
                 ],
             ],
+            'autorzy' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route' => '/autorzy[/:action][/:id]',
+                    'defaults' => [
+                        'controller' => AutorzyController::class,
+                        'action' => 'lista',
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
         'factories' => [
             Controller\IndexController::class => LazyControllerAbstractFactory::class,
             KsiazkiController::class => KsiazkiControllerFactory::class,
+            AutorzyController::class => AutorzyControllerFactory::class,
         ],
     ],
     'service_manager' => [
@@ -63,6 +77,7 @@ return [
             Ksiazka::class => InvokableFactory::class,
             Autor::class => InvokableFactory::class,
             KsiazkaForm::class => ReflectionBasedAbstractFactory::class,
+            AutorForm::class => ReflectionBasedAbstractFactory::class,
         ],
     ],
     'view_manager' => [
