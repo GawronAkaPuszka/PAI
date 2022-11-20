@@ -43,8 +43,11 @@ class OfertyController extends AbstractActionController
 
     public function szczegolyAction()
     {
+        $form = new Form\OfertaSzukajForm();
         $daneOferty = $this->oferta->pobierz($this->params('id'));
+        $form->populateValues($daneOferty);
 
-        return ['oferta' => $daneOferty];
+        return ['oferta' => $daneOferty,
+                'form' => $form];
     }
 }

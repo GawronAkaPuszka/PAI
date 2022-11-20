@@ -51,10 +51,45 @@ class OfertaSzukajForm extends Form
             ],
         ]);
         $this->add([
+            'name' => 'cenaMin',
+            'type' => 'Text',
+            'options' => [
+                'label' => 'Cena minimalna',
+            ],
+        ]);
+        $this->add([
+            'name' => 'cenaMax',
+            'type' => 'Text',
+            'options' => [
+                'label' => 'Cena maksymalna',
+            ],
+        ]);
+        $this->add([
             'name' => 'powierzchnia',
             'type' => 'Text',
             'options' => [
                 'label' => 'Powierzchnia',
+            ],
+        ]);
+        $this->add([
+            'name' => 'powierzchniaMin',
+            'type' => 'Text',
+            'options' => [
+                'label' => 'Powierzchnia minimalna',
+            ],
+        ]);
+        $this->add([
+            'name' => 'powierzchniaMax',
+            'type' => 'Text',
+            'options' => [
+                'label' => 'Powierzchnia maksymalna',
+            ],
+        ]);
+        $this->add([
+            'name' => 'szczegoly',
+            'type' => 'Text',
+            'options' => [
+                'label' => 'Szczegóły',
             ],
         ]);
         $this->add([
