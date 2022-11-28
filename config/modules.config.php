@@ -16,7 +16,7 @@ return [
     'Laminas\Session',
     'Laminas\Mvc\I18n',
     'Laminas\Form',
-    //'Laminas\I18n', For some reason commenting this line solves an error 500 on my MAC
+    'Laminas\I18n',
     'Laminas\InputFilter',
     'Laminas\Filter',
     'Laminas\Hydrator',

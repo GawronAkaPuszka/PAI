@@ -9,16 +9,13 @@ use Nieruchomosci\Model\Oferta;
 
 class OfertyController extends AbstractActionController
 {
-    private Oferta $oferta;
-
     /**
      * OfertyController constructor.
      *
      * @param Oferta $oferta
      */
-    public function __construct(Oferta $oferta)
+    public function __construct(public Oferta $oferta)
     {
-        $this->oferta = $oferta;
     }
 
     public function listaAction()
@@ -49,5 +46,16 @@ class OfertyController extends AbstractActionController
 
         return ['oferta' => $daneOferty,
                 'form' => $form];
+    }
+
+    public function drukujAction()
+    {
+        $oferta = $this->oferta->pobierz($this->params('id'));
+
+        if ($oferta) {
+            $this->oferta->drukuj($oferta);
+        }
+
+        return $this->getResponse();
     }
 }

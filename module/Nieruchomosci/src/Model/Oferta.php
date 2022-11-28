@@ -4,16 +4,21 @@ namespace Nieruchomosci\Model;
 
 use ArrayObject;
 use Laminas\Db\Adapter as DbAdapter;
-use Laminas\Db\Sql\Predicate\Predicate;
 use Laminas\Db\Sql\Sql;
 use Laminas\Paginator\Adapter\LaminasDb\DbSelect;
 use Laminas\Paginator\Paginator;
-use Laminas\Validator\LessThan;
+use Laminas\View\Model\ViewModel;
+use Laminas\View\Renderer\PhpRenderer;
+use Mpdf\Mpdf;
 
 class Oferta implements DbAdapter\AdapterAwareInterface
 {
     use DbAdapter\AdapterAwareTrait;
 
+    public function __construct(public PhpRenderer $phpRenderer)
+    {
+    }
+    
     /**
      * Pobiera obiekt Paginator dla przekazanych parametrów.
      *
@@ -73,5 +78,22 @@ class Oferta implements DbAdapter\AdapterAwareInterface
         $wynik = $dbAdapter->query($selectString, $dbAdapter::QUERY_MODE_EXECUTE);
 
         return $wynik->count() ? $wynik->current() : [];
+    }
+
+    /**
+     * Generuje PDF z danymi oferty.
+     *
+     * @param $oferta
+     * @throws \Mpdf\MpdfException
+     */
+    public function drukuj($oferta): void
+    {
+        $vm = new ViewModel(['oferta' => $oferta]);
+        $vm->setTemplate('nieruchomosci/oferty/drukuj');
+        $html = $this->phpRenderer->render($vm);
+
+        $mpdf = new Mpdf(['tempDir' => getcwd() . '/data/temp']);
+        $mpdf->WriteHTML($html);
+        $mpdf->Output('oferta.pdf', 'D');
     }
 }
