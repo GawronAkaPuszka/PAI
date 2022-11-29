@@ -9,6 +9,7 @@ use Laminas\Paginator\Adapter\LaminasDb\DbSelect;
 use Laminas\Paginator\Paginator;
 use Laminas\View\Model\ViewModel;
 use Laminas\View\Renderer\PhpRenderer;
+use Laminas\Session\SessionManager;
 use Mpdf\Mpdf;
 
 class Oferta implements DbAdapter\AdapterAwareInterface
@@ -59,6 +60,26 @@ class Oferta implements DbAdapter\AdapterAwareInterface
         return new Paginator($paginatorAdapter);
     }
 
+    public function pobierzDoDruku() 
+    {
+        $dbAdapter = $this->adapter;
+        $session = new SessionManager();
+
+        $sql = new Sql($dbAdapter);
+        $select = $sql->select('oferty');
+        $select->join(
+            'koszyk',
+            'oferty.id = koszyk.id_oferty',
+            [],
+            $select::JOIN_INNER
+        );
+        $select->where(['koszyk.id_sesji' => $session->getId()]);
+        $selectString = $sql->buildSqlString($select);
+		$wynik = $dbAdapter->query($selectString, $dbAdapter::QUERY_MODE_EXECUTE);
+
+        return $wynik;
+    }
+
     /**
      * Pobiera dane jednej oferty.
      *
@@ -73,7 +94,6 @@ class Oferta implements DbAdapter\AdapterAwareInterface
         $sql = new Sql($dbAdapter);
         $select = $sql->select('oferty');
         $select->where(['id' => $id]);
-
         $selectString = $sql->buildSqlString($select);
         $wynik = $dbAdapter->query($selectString, $dbAdapter::QUERY_MODE_EXECUTE);
 
@@ -95,5 +115,26 @@ class Oferta implements DbAdapter\AdapterAwareInterface
         $mpdf = new Mpdf(['tempDir' => getcwd() . '/data/temp']);
         $mpdf->WriteHTML($html);
         $mpdf->Output('oferta.pdf', 'D');
+    }
+
+    public function drukujWszystko($oferty): void
+    {
+        
+        $mpdf = new Mpdf(['tempDir' => getcwd() . '/data/temp']);
+        foreach($oferty as $oferta):
+            $vm = new ViewModel(['oferta' => $oferta]);
+            $vm->setTemplate('nieruchomosci/oferty/drukuj');
+            $html = $this->phpRenderer->render($vm);
+
+            
+            $mpdf->AddPage();
+            $mpdf->WriteHTML($html);
+        endforeach;
+
+        if($mpdf != null)
+        {
+            $mpdf->Output('koszyk.pdf', 'D');
+        }
+        
     }
 }
