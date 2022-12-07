@@ -5,6 +5,7 @@ namespace Nieruchomosci\Model;
 use ArrayObject;
 use Laminas\Db\Adapter as DbAdapter;
 use Laminas\Db\Sql\Sql;
+use Laminas\Filter\ToInt;
 use Laminas\Paginator\Adapter\LaminasDb\DbSelect;
 use Laminas\Paginator\Paginator;
 use Laminas\View\Model\ViewModel;
@@ -117,6 +118,18 @@ class Oferta implements DbAdapter\AdapterAwareInterface
         $mpdf->Output('oferta.pdf', 'D');
     }
 
+    public function drukujDoZmiennej($oferta)
+    {
+        $vm = new ViewModel(['oferta' => $oferta]);
+        $vm->setTemplate('nieruchomosci/oferty/drukuj');
+        $html = $this->phpRenderer->render($vm);
+
+        $mpdf = new Mpdf();
+        $mpdf->WriteHTML($html);
+
+        return $mpdf->Output('oferta.pdf', \Mpdf\Output\Destination::STRING_RETURN);
+    }
+
     public function drukujWszystko($oferty): void
     {
         
@@ -135,6 +148,25 @@ class Oferta implements DbAdapter\AdapterAwareInterface
         {
             $mpdf->Output('koszyk.pdf', 'D');
         }
-        
+    
+    }
+
+    public function service($idOferty, $tresc, $telefon, $nadawca): void
+    {
+        $dbAdapter = $this->adapter;
+		$session = new SessionManager();
+		$sql = new Sql($dbAdapter);
+
+        $insert = $sql->insert('log');
+		$insert->values([
+			'id_klienta' => $session->getId(),
+            'id_oferty' => $idOferty,
+            'tresc' => $tresc,
+            'telefon' => $telefon,
+            'nadawca' => $nadawca
+		]);
+			
+		$selectString = $sql->buildSqlString($insert);
+		$wynik = $dbAdapter->query($selectString, $dbAdapter::QUERY_MODE_EXECUTE);
     }
 }
