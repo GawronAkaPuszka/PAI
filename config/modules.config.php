@@ -6,6 +6,7 @@
  * This should be an array of module namespaces used in the application.
  */
 return [
+    'Laminas\Log',
     'Laminas\Mail',
     'Laminas\Navigation',
     'Laminas\Paginator\Adapter\LaminasDb',
@@ -26,6 +27,7 @@ return [
     'Laminas\Validator',
     'Laminas\ZendFrameworkBridge',
     'TwbsHelper',
+    'Admin',
     'Application',
     'Nieruchomosci',
 ];
